@@ -182,12 +182,17 @@
       font-weight: 700;
       margin-bottom: 4px;
     }
-    .member-role {
-      font-size: .8rem;
-      color: var(--text-muted);
+    .member-role { display: none; }
+    .member-wip {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 2px 10px;
       margin-bottom: 12px;
     }
-    .member-role::before { content: "メイン業務："; }
     .member-more {
       font-size: .75rem;
       color: var(--accent);
@@ -248,14 +253,22 @@
       text-align: center;
       margin-bottom: 4px;
     }
-    .member-modal-role {
-      font-size: .85rem;
-      color: var(--accent);
-      text-align: center;
-      margin-bottom: 24px;
-      letter-spacing: .05em;
+    .member-modal-section {
+      margin-bottom: 16px;
     }
-    .member-modal-role::before { content: "メイン業務："; }
+    .member-modal-label {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      color: var(--accent);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .member-modal-role {
+      font-size: .95rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
     .member-modal-desc {
       font-size: .9rem;
       color: var(--text-muted);
@@ -530,43 +543,43 @@
         <div class="member-card" data-member="0">
           <div class="member-avatar">👤</div>
           <div class="member-name">岩佐 錬</div>
-          <div class="member-role">掃除 / 新しい団員を作ること</div>
           <div class="member-more">詳細を見る →</div>
         </div>
         <div class="member-card" data-member="1">
           <div class="member-avatar">⚙️</div>
           <div class="member-name">フライス 1号機</div>
-          <div class="member-role">CNCフライス盤</div>
           <div class="member-more">詳細を見る →</div>
         </div>
         <div class="member-card" data-member="2">
           <div class="member-avatar">⚙️</div>
           <div class="member-name">フライス 2号機</div>
-          <div class="member-role">CNCフライス盤</div>
           <div class="member-more">詳細を見る →</div>
         </div>
         <div class="member-card" data-member="3">
-          <div class="member-avatar">🔩</div>
-          <div class="member-name">旋盤 1号機</div>
-          <div class="member-role">CNC旋盤</div>
+          <div class="member-avatar">⚙️</div>
+          <div class="member-name">フライス 3号機</div>
           <div class="member-more">詳細を見る →</div>
         </div>
         <div class="member-card" data-member="4">
-          <div class="member-avatar">🔧</div>
-          <div class="member-name">ベン造さん</div>
-          <div class="member-role">パイプベンダー</div>
+          <div class="member-avatar">🔩</div>
+          <div class="member-name">旋盤 1号機</div>
           <div class="member-more">詳細を見る →</div>
         </div>
         <div class="member-card" data-member="5">
-          <div class="member-avatar">🚧</div>
-          <div class="member-name">フラ爺</div>
-          <div class="member-role">CNCフライス盤（改造中）</div>
+          <div class="member-avatar">🔧</div>
+          <div class="member-name">ベン造さん</div>
           <div class="member-more">詳細を見る →</div>
         </div>
         <div class="member-card" data-member="6">
           <div class="member-avatar">🚧</div>
+          <div class="member-name">フラ爺</div>
+          <div class="member-wip">改造中</div>
+          <div class="member-more">詳細を見る →</div>
+        </div>
+        <div class="member-card" data-member="7">
+          <div class="member-avatar">🚧</div>
           <div class="member-name">旋爺</div>
-          <div class="member-role">CNC旋盤（改造中）</div>
+          <div class="member-wip">改造中</div>
           <div class="member-more">詳細を見る →</div>
         </div>
       </div>
@@ -579,8 +592,14 @@
       <button class="member-modal-close" id="memberModalClose">✕</button>
       <div class="member-modal-avatar" id="memberModalAvatar"></div>
       <div class="member-modal-name" id="memberModalName"></div>
-      <div class="member-modal-role" id="memberModalRole"></div>
-      <div class="member-modal-desc" id="memberModalDesc"></div>
+      <div class="member-modal-section">
+        <div class="member-modal-label">メイン業務</div>
+        <div class="member-modal-role" id="memberModalRole"></div>
+      </div>
+      <div class="member-modal-section">
+        <div class="member-modal-label">特徴</div>
+        <div class="member-modal-desc" id="memberModalDesc"></div>
+      </div>
     </div>
   </div>
 
@@ -668,27 +687,33 @@
       },
       {
         name: "フライス 1号機",
-        role: "CNCフライス盤",
+        role: "下加工",
         avatar: "⚙️",
-        desc: "（特徴・エピソードを追記予定）",
+        desc: "（追記予定）",
       },
       {
         name: "フライス 2号機",
-        role: "CNCフライス盤",
+        role: "仕上げ加工",
         avatar: "⚙️",
-        desc: "（特徴・エピソードを追記予定）",
+        desc: "（追記予定）",
+      },
+      {
+        name: "フライス 3号機",
+        role: "穴のプロット加工",
+        avatar: "⚙️",
+        desc: "（追記予定）",
       },
       {
         name: "旋盤 1号機",
-        role: "CNC旋盤",
+        role: "小物旋盤加工",
         avatar: "🔩",
-        desc: "（特徴・エピソードを追記予定）",
+        desc: "（追記予定）",
       },
       {
         name: "ベン造さん",
-        role: "パイプベンダー",
+        role: "パイプを曲げる",
         avatar: "🔧",
-        desc: "（特徴・エピソードを追記予定）",
+        desc: "（追記予定）",
       },
       {
         name: "フラ爺",
