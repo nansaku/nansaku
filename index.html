@@ -713,7 +713,7 @@
         name: "ベン造さん",
         role: "パイプを曲げる",
         avatar: "🔧",
-        desc: "（追記予定）",
+        desc: "アメリカ生まれ。一度もまともに使われることなく改造されてしまったかわいそうな団員。\n\n対応鋼管：25.4mm / 31.75mm / 38.1mm / 41.3mm / 44.45mm",
       },
       {
         name: "フラ爺",
@@ -742,7 +742,7 @@
         memberModalAvatar.textContent = m.avatar;
         memberModalName.textContent   = m.name;
         memberModalRole.textContent   = m.role;
-        memberModalDesc.textContent   = m.desc;
+        memberModalDesc.innerHTML = m.desc.replace(/\n/g, '<br>');
         memberModal.classList.add('open');
       });
     });
