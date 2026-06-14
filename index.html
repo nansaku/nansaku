@@ -144,6 +144,126 @@
       max-width: 600px;
     }
 
+    /* ── 団員紹介 ── */
+    .members-bg {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+    .member-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 32px 24px;
+      cursor: pointer;
+      transition: border-color .2s;
+      text-align: center;
+    }
+    .member-card:hover { border-color: var(--accent); }
+    .member-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      overflow: hidden;
+    }
+    .member-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .member-name {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .member-role {
+      font-size: .8rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .member-more {
+      font-size: .75rem;
+      color: var(--accent);
+      letter-spacing: .05em;
+    }
+
+    /* 団員モーダル */
+    .member-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,.85);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .member-modal.open { display: flex; }
+    .member-modal-inner {
+      position: relative;
+      width: min(500px, 100%);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 40px;
+    }
+    .member-modal-close {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 36px; height: 36px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+      transition: border-color .2s;
+    }
+    .member-modal-close:hover { border-color: var(--accent); color: var(--accent); }
+    .member-modal-avatar {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      overflow: hidden;
+    }
+    .member-modal-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .member-modal-name {
+      font-size: 1.4rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    .member-modal-role {
+      font-size: .85rem;
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 24px;
+      letter-spacing: .05em;
+    }
+    .member-modal-desc {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    @media (max-width: 768px) {
+      .members-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     /* ── GALLERY（写真）── */
     .gallery-grid {
       display: grid;
@@ -361,6 +481,7 @@
     <a class="logo" href="#">なんでも作製団</a>
     <nav>
       <a href="#about">About</a>
+      <a href="#members">団員紹介</a>
       <a href="#gallery">製作事例</a>
       <a href="#instagram">Instagram</a>
     </nav>
@@ -385,7 +506,9 @@
       <div class="section-label">About</div>
       <h2 class="section-title">岩佐　錬</h2>
       <div class="about-text">
-        <p>CNCによるアルミ加工を中心に、アイデアを形にすることを大切にしています。</p>
+        <p>活動のメインは、工作機械そのものを自分で作ること。<br>
+        市販の機械を買うのではなく、必要な機械を自分で設計・製作するところから始めています。</p>
+        <p>その機械を使ってCNCアルミ加工などのものづくりをしており、アイデアを形にすることを大切にしています。</p>
         <p>
           「とりあえずやってみる」精神で、必要なものは作る、壊れたものは直す。<br>
           その記録をInstagramで発信しています。
@@ -393,6 +516,53 @@
       </div>
     </div>
   </section>
+
+  <div class="divider"></div>
+
+  <!-- 団員紹介 -->
+  <div class="members-bg" id="members">
+    <div class="section-wrap">
+      <div class="section-label">Members</div>
+      <h2 class="section-title">団員紹介</h2>
+      <div class="members-grid">
+        <div class="member-card" data-member="0">
+          <div class="member-avatar">⚙️</div>
+          <div class="member-name">フライス 1号機</div>
+          <div class="member-role">CNCフライス盤</div>
+          <div class="member-more">詳細を見る →</div>
+        </div>
+        <div class="member-card" data-member="1">
+          <div class="member-avatar">⚙️</div>
+          <div class="member-name">フライス 2号機</div>
+          <div class="member-role">CNCフライス盤</div>
+          <div class="member-more">詳細を見る →</div>
+        </div>
+        <div class="member-card" data-member="2">
+          <div class="member-avatar">🔩</div>
+          <div class="member-name">旋盤 1号機</div>
+          <div class="member-role">旋盤</div>
+          <div class="member-more">詳細を見る →</div>
+        </div>
+        <div class="member-card" data-member="3">
+          <div class="member-avatar">🔧</div>
+          <div class="member-name">ベン造さん</div>
+          <div class="member-role">パイプベンダー</div>
+          <div class="member-more">詳細を見る →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 団員モーダル -->
+  <div class="member-modal" id="memberModal">
+    <div class="member-modal-inner">
+      <button class="member-modal-close" id="memberModalClose">✕</button>
+      <div class="member-modal-avatar" id="memberModalAvatar"></div>
+      <div class="member-modal-name" id="memberModalName"></div>
+      <div class="member-modal-role" id="memberModalRole"></div>
+      <div class="member-modal-desc" id="memberModalDesc"></div>
+    </div>
+  </div>
 
   <div class="divider"></div>
 
@@ -468,6 +638,55 @@
   </footer>
 
   <script>
+    // ── 団員データ
+    const MEMBER_DATA = [
+      {
+        name: "フライス 1号機",
+        role: "CNCフライス盤",
+        avatar: "⚙️",
+        desc: "（特徴・エピソードを追記予定）",
+      },
+      {
+        name: "フライス 2号機",
+        role: "CNCフライス盤",
+        avatar: "⚙️",
+        desc: "（特徴・エピソードを追記予定）",
+      },
+      {
+        name: "旋盤 1号機",
+        role: "旋盤",
+        avatar: "🔩",
+        desc: "（特徴・エピソードを追記予定）",
+      },
+      {
+        name: "ベン造さん",
+        role: "パイプベンダー",
+        avatar: "🔧",
+        desc: "（特徴・エピソードを追記予定）",
+      },
+    ];
+
+    const memberModal      = document.getElementById('memberModal');
+    const memberModalClose = document.getElementById('memberModalClose');
+    const memberModalAvatar = document.getElementById('memberModalAvatar');
+    const memberModalName  = document.getElementById('memberModalName');
+    const memberModalRole  = document.getElementById('memberModalRole');
+    const memberModalDesc  = document.getElementById('memberModalDesc');
+
+    document.querySelectorAll('.member-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const m = MEMBER_DATA[card.dataset.member];
+        memberModalAvatar.textContent = m.avatar;
+        memberModalName.textContent   = m.name;
+        memberModalRole.textContent   = m.role;
+        memberModalDesc.textContent   = m.desc;
+        memberModal.classList.add('open');
+      });
+    });
+
+    memberModalClose.addEventListener('click', () => memberModal.classList.remove('open'));
+    memberModal.addEventListener('click', e => { if (e.target === memberModal) memberModal.classList.remove('open'); });
+
     // ────────────────────────────────────────────
     // モデルデータ
     // カテゴリを追加したい場合はここに追記するだけ
