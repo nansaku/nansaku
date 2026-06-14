@@ -321,6 +321,95 @@
       transition: opacity .3s;
     }
     .gallery-item:hover .gallery-caption { opacity: 1; }
+    .gallery-item-count {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: rgba(0,0,0,.6);
+      color: var(--text);
+      font-size: .7rem;
+      padding: 2px 7px;
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    /* ── ギャラリーライトボックス ── */
+    .lb-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.92);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb-overlay.open { display: flex; }
+    .lb-inner {
+      position: relative;
+      width: min(92vw, 900px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .lb-img-wrap {
+      width: 100%;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+    }
+    .lb-img-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .lb-title {
+      color: var(--text);
+      font-size: .95rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+    }
+    .lb-counter {
+      color: #888;
+      font-size: .8rem;
+    }
+    .lb-close {
+      position: absolute;
+      top: -36px; right: 0;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px 8px;
+    }
+    .lb-prev, .lb-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,.5);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 1.4rem;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+    }
+    .lb-prev:hover, .lb-next:hover { background: rgba(232,160,32,.3); }
+    .lb-prev { left: -56px; }
+    .lb-next { right: -56px; }
+    .lb-prev[hidden], .lb-next[hidden] { display: none; }
+    @media (max-width: 700px) {
+      .lb-prev { left: -40px; }
+      .lb-next { right: -40px; }
+    }
 
     /* ── 3D MODELS ── */
     .models-bg {
@@ -562,7 +651,7 @@
         </div>
         <div class="member-card" data-member="4">
           <div class="member-avatar">🔩</div>
-          <div class="member-name">旋盤 1号機</div>
+          <div class="member-name">旋ちゃん</div>
           <div class="member-more">詳細を見る →</div>
         </div>
         <div class="member-card" data-member="5">
@@ -609,23 +698,20 @@
   <div id="gallery" class="section-wrap">
     <div class="section-label">Works</div>
     <h2 class="section-title">製作事例</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item">
-        <img src="HP画像/6057.jpg" alt="ランドクルーザー アルミバックドアハンドル">
-        <div class="gallery-caption">ランドクルーザー アルミバックドアハンドル</div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+
+  <!-- ギャラリーライトボックス -->
+  <div class="lb-overlay" id="lbOverlay">
+    <div class="lb-inner">
+      <button class="lb-close" id="lbClose">✕</button>
+      <button class="lb-prev" id="lbPrev">&#8249;</button>
+      <div class="lb-img-wrap">
+        <img id="lbImg" src="" alt="">
       </div>
-      <div class="gallery-item">
-        <img src="HP画像/6055.jpg" alt="ランドクルーザー アルミスロットルコントロールノブ">
-        <div class="gallery-caption">ランドクルーザー アルミスロットルコントロールノブ</div>
-      </div>
-      <div class="gallery-item">
-        <img src="HP画像/6056.jpg" alt="リップクリームカバー">
-        <div class="gallery-caption">リップクリームカバー</div>
-      </div>
-      <div class="gallery-item">
-        <img src="HP画像/6058.jpg" alt="ランドクルーザー 給油口レバー">
-        <div class="gallery-caption">ランドクルーザー 給油口レバー</div>
-      </div>
+      <button class="lb-next" id="lbNext">&#8250;</button>
+      <div class="lb-title" id="lbTitle"></div>
+      <div class="lb-counter" id="lbCounter"></div>
     </div>
   </div>
 
@@ -704,7 +790,7 @@
         desc: "（追記予定）",
       },
       {
-        name: "旋盤 1号機",
+        name: "旋ちゃん",
         role: "小物旋盤加工",
         avatar: "🔩",
         desc: "（追記予定）",
@@ -749,6 +835,89 @@
 
     memberModalClose.addEventListener('click', () => memberModal.classList.remove('open'));
     memberModal.addEventListener('click', e => { if (e.target === memberModal) memberModal.classList.remove('open'); });
+
+    // ── ギャラリーデータ
+    // 画像を追加する場合は images 配列に追記するだけ
+    const GALLERY_DATA = [
+      {
+        title: "ランドクルーザー アルミバックドアハンドル",
+        images: ["HP画像/6057.jpg"],
+      },
+      {
+        title: "ランドクルーザー アルミスロットルコントロールノブ",
+        images: ["HP画像/6055.jpg"],
+      },
+      {
+        title: "リップクリームカバー",
+        images: ["HP画像/6056.jpg"],
+      },
+      {
+        title: "ランドクルーザー 給油口レバー",
+        images: ["HP画像/6058.jpg"],
+      },
+    ];
+
+    // ── ギャラリーグリッド生成
+    const galleryGrid = document.getElementById('galleryGrid');
+    GALLERY_DATA.forEach((item, idx) => {
+      const el = document.createElement('div');
+      el.className = 'gallery-item';
+      el.dataset.index = idx;
+      el.innerHTML = `
+        <img src="${item.images[0]}" alt="${item.title}">
+        <div class="gallery-caption">${item.title}</div>
+        ${item.images.length > 1 ? `<div class="gallery-item-count">+${item.images.length}</div>` : ''}
+      `;
+      el.addEventListener('click', () => openLightbox(idx, 0));
+      galleryGrid.appendChild(el);
+    });
+
+    // ── ライトボックス
+    const lbOverlay = document.getElementById('lbOverlay');
+    const lbImg     = document.getElementById('lbImg');
+    const lbTitle   = document.getElementById('lbTitle');
+    const lbCounter = document.getElementById('lbCounter');
+    const lbPrev    = document.getElementById('lbPrev');
+    const lbNext    = document.getElementById('lbNext');
+    const lbClose   = document.getElementById('lbClose');
+
+    let lbCurrent = { itemIdx: 0, imgIdx: 0 };
+
+    function openLightbox(itemIdx, imgIdx) {
+      lbCurrent = { itemIdx, imgIdx };
+      updateLightbox();
+      lbOverlay.classList.add('open');
+    }
+
+    function updateLightbox() {
+      const item = GALLERY_DATA[lbCurrent.itemIdx];
+      const i    = lbCurrent.imgIdx;
+      lbImg.src     = item.images[i];
+      lbImg.alt     = item.title;
+      lbTitle.textContent   = item.title;
+      lbCounter.textContent = item.images.length > 1 ? `${i + 1} / ${item.images.length}` : '';
+      lbPrev.hidden = i === 0;
+      lbNext.hidden = i === item.images.length - 1;
+    }
+
+    lbPrev.addEventListener('click', e => {
+      e.stopPropagation();
+      lbCurrent.imgIdx--;
+      updateLightbox();
+    });
+    lbNext.addEventListener('click', e => {
+      e.stopPropagation();
+      lbCurrent.imgIdx++;
+      updateLightbox();
+    });
+    lbClose.addEventListener('click', () => lbOverlay.classList.remove('open'));
+    lbOverlay.addEventListener('click', e => { if (e.target === lbOverlay) lbOverlay.classList.remove('open'); });
+    document.addEventListener('keydown', e => {
+      if (!lbOverlay.classList.contains('open')) return;
+      if (e.key === 'Escape') lbOverlay.classList.remove('open');
+      if (e.key === 'ArrowLeft' && !lbPrev.hidden) { lbCurrent.imgIdx--; updateLightbox(); }
+      if (e.key === 'ArrowRight' && !lbNext.hidden) { lbCurrent.imgIdx++; updateLightbox(); }
+    });
 
     // ────────────────────────────────────────────
     // モデルデータ
